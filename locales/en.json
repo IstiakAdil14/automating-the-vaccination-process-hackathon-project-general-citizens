@@ -1,0 +1,143 @@
+{
+  "nav": {
+    "vaccineChecker": "Vaccine Checker",
+    "emergencyInfo": "Emergency Info",
+    "healthGuide": "Health Guide"
+  },
+  "lang": {
+    "en": "EN",
+    "bn": "বাং"
+  },
+  "checker": {
+    "title": "Vaccine Checker",
+    "subtitle": "Find out which vaccines are recommended for you based on your age group.",
+    "disclaimer": "This tool provides general guidance based on WHO and national immunization schedules. It is not a substitute for professional medical advice. Always consult a healthcare provider.",
+    "ageGroup": "Select Your Age Group",
+    "ageGroups": {
+      "infant": "Infant",
+      "infantRange": "0–1 yr",
+      "child": "Child",
+      "childRange": "2–12 yrs",
+      "teen": "Teen",
+      "teenRange": "13–17 yrs",
+      "adult": "Adult",
+      "adultRange": "18–59 yrs",
+      "elderly": "Elderly",
+      "elderlyRange": "60+ yrs"
+    },
+    "previousVaccines": "Vaccines Already Received",
+    "previousVaccinesHint": "Check off vaccines you have already received to see what's still needed.",
+    "selectAll": "Select All",
+    "clearAll": "Clear All",
+    "recommendations": "Recommendations",
+    "upToDate": "You're up to date! Great job.",
+    "upToDateSub": "All recommended vaccines for your age group have been received.",
+    "emptyState": "Select your age group above to see recommendations.",
+    "prevents": "Prevents",
+    "doses": "dose",
+    "dosesPlural": "doses",
+    "daysApart": "days apart",
+    "singleDose": "Single dose",
+    "sideEffects": "Common Side Effects",
+    "contraindications": "Contraindications",
+    "whoCode": "WHO",
+    "bookVaccine": "Book This Vaccine",
+    "noVaccinesForAge": "No specific vaccines listed for this age group."
+  },
+  "emergency": {
+    "title": "Emergency Info",
+    "subtitle": "Critical information for vaccine reactions and emergencies. Available offline.",
+    "hotlineTitle": "National Health Emergency Hotline",
+    "hotlineNumber": "16263",
+    "hotlineAvailable": "Available 24/7",
+    "hotlineTap": "Tap to call",
+    "reactionGuideTitle": "Severe Reaction? Follow These Steps",
+    "steps": [
+      { "title": "Stop All Activity", "desc": "Sit or lie down immediately. Do not exert yourself." },
+      { "title": "Call the Hotline", "desc": "Dial 16263 now. Describe your symptoms clearly." },
+      { "title": "Do Not Drive", "desc": "Ask someone else to drive or call an ambulance." },
+      { "title": "Go to Hospital", "desc": "Proceed to the nearest emergency department." }
+    ],
+    "symptomTitle": "Symptom Severity Checker",
+    "symptomQ1": "What symptom are you experiencing?",
+    "symptomQ2": "How severe does it feel?",
+    "symptoms": ["Fever", "Swelling", "Difficulty breathing", "Rash", "Chest pain", "Fainting", "Other"],
+    "severities": {
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "severe": "Severe"
+    },
+    "results": {
+      "mild": "Monitor at home. Rest and stay hydrated. If symptoms worsen, contact your doctor.",
+      "moderate": "Visit your nearest vaccination center or clinic for evaluation.",
+      "severe": "Call emergency services immediately."
+    },
+    "reset": "Start Over",
+    "hospitalTitle": "Find Nearest Hospital",
+    "findHospital": "Find Nearest Hospital",
+    "locating": "Locating you...",
+    "locationDenied": "Location access denied. Select your district manually:",
+    "selectDistrict": "Select District",
+    "distance": "km away",
+    "offlineBanner": "You're offline — emergency info below is still available.",
+    "requiresInternet": "Requires internet connection",
+    "reactionAccordionTitle": "Vaccine-Specific Reactions",
+    "contactsTitle": "Emergency Contacts",
+    "contactsHeaders": { "authority": "Authority", "phone": "Phone", "available": "Available" },
+    "contacts": [
+      { "authority": "National Emergency", "phone": "999", "available": "24/7" },
+      { "authority": "MoH Hotline (Shastho Batayon)", "phone": "16263", "available": "24/7" },
+      { "authority": "Platform Support", "phone": "+880-2-9887654", "available": "9am–6pm" },
+      { "authority": "Poison Control", "phone": "+880-2-9669300", "available": "24/7" }
+    ],
+    "reportReaction": "Report a Reaction",
+    "reportModal": {
+      "title": "Report a Vaccine Reaction",
+      "name": "Your Name (optional)",
+      "phone": "Phone Number",
+      "vaccine": "Vaccine Received",
+      "description": "Brief Description",
+      "submit": "Submit Report",
+      "submitting": "Submitting...",
+      "success": "Report submitted. Thank you.",
+      "close": "Close"
+    },
+    "vaccineReactions": [
+      {
+        "vaccine": "COVID-19",
+        "reactions": [
+          { "label": "Anaphylaxis", "rarity": "Very Rare" },
+          { "label": "Myocarditis (mRNA vaccines)", "rarity": "Rare" }
+        ],
+        "emergencyStep": "Call 16263 immediately. Do not drive. Lie flat.",
+        "whoRef": "https://www.who.int/news-room/feature-stories/detail/the-effects-of-virus-variants-on-covid-19-vaccines"
+      },
+      {
+        "vaccine": "MMR",
+        "reactions": [
+          { "label": "Febrile seizure", "rarity": "Rare" },
+          { "label": "Thrombocytopenic purpura", "rarity": "Very Rare" }
+        ],
+        "emergencyStep": "Keep calm, do not restrain. Call 999 if seizure lasts >5 min.",
+        "whoRef": "https://www.who.int/immunization/diseases/measles/en/"
+      },
+      {
+        "vaccine": "OPV",
+        "reactions": [
+          { "label": "Vaccine-associated paralytic polio (VAPP)", "rarity": "Very Rare" }
+        ],
+        "emergencyStep": "Seek immediate medical attention. Report to MoH.",
+        "whoRef": "https://www.who.int/immunization/diseases/poliomyelitis/en/"
+      },
+      {
+        "vaccine": "BCG",
+        "reactions": [
+          { "label": "Lymphadenitis", "rarity": "Rare" },
+          { "label": "Disseminated BCG disease", "rarity": "Very Rare" }
+        ],
+        "emergencyStep": "Consult a doctor. Do not lance swollen nodes.",
+        "whoRef": "https://www.who.int/immunization/diseases/tuberculosis/en/"
+      }
+    ]
+  }
+}
