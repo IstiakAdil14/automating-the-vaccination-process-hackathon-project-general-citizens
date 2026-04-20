@@ -1,6 +1,6 @@
 # 👤 Vaccination Citizen — Citizen-Facing Portal
 
-Part of the [Vaccination Management System](https://github.com/your-org/vaccination-project).
+Part of the [Vaccination Management System](https://github.com/IstiakAdil14/automating-the-vaccination-process-hackathon-project-general-users).
 
 Runs on **port 3000** locally. Handles citizen registration, appointment booking, vaccine passport, and AI assistance.
 
