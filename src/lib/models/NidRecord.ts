@@ -2,13 +2,15 @@ import { Schema, Document, model, models } from "mongoose";
 
 export interface INidRecord extends Document {
   nid: string;
-  userId: Schema.Types.ObjectId;
+  userId?: Schema.Types.ObjectId;
+  addedBy: "admin" | "self";
   registeredAt: Date;
 }
 
 const NidRecordSchema = new Schema<INidRecord>({
-  nid: { type: String, required: true, unique: true },
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  nid: { type: String, required: true, unique: true, trim: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", default: null },
+  addedBy: { type: String, enum: ["admin", "self"], default: "admin" },
   registeredAt: { type: Date, default: Date.now },
 });
 

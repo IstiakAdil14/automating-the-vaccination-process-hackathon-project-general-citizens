@@ -127,6 +127,7 @@ export default function RegisterPage() {
       if (!res.ok) {
         const map: Record<string, string> = {
           nid_format: T.nidInvalid, nid_checksum: T.nidChecksumFail, nid_not_found: T.nidNotFound,
+          nid_not_approved: T.nidNotApproved, nid_exists: T.nidNotFound,
           birth_cert_format: T.birthCertInvalid, email_exists: T.emailExists,
         };
         setError(map[data.error] ?? data.error);
@@ -402,7 +403,7 @@ export default function RegisterPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>{T.dateOfBirth}</label>
-                  <input value={dob} onChange={(e) => setDob(e.target.value)} type="date" className="input-field" required />
+                  <input value={dob} onChange={(e) => setDob(e.target.value)} type="date" max={(() => { const d = new Date(); d.setFullYear(d.getFullYear() - 19); return d.toISOString().split("T")[0]; })()} className="input-field" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>{T.gender}</label>

@@ -14,11 +14,6 @@ import SmartRemindersWidget from "@/components/home/SmartRemindersWidget";
 import FamilyStatusPanel   from "@/components/home/FamilyStatusPanel";
 import OfflineBanner       from "@/components/home/OfflineBanner";
 
-// ── Mock fallbacks (used until real API is wired) ─────────────────────────────
-import {
-  homeStats, vaccineReminders, familyMembers,
-} from "@/lib/mock-data";
-
 import { Syringe, Calendar, Users, TrendingUp, AlertTriangle } from "lucide-react";
 import type { VaccineEntry, VaccineReminder, FamilyMember } from "@/types/home";
 
@@ -127,16 +122,14 @@ function AppointmentSection() {
 function RemindersSection() {
   const { data, isLoading } = useSWR("/api/vaccinations", fetcher, { fallbackData: null, revalidateOnFocus: false, shouldRetryOnError: false });
 
-  const reminders: VaccineReminder[] = data?.vaccines
-    ? data.vaccines
-        .filter((v: { status: string }) => v.status !== "completed")
-        .map((v: { _id: string; vaccine: string; dueDate: string; status: string }) => ({
-          id:       v._id ?? v.vaccine,
-          vaccine:  v.vaccine,
-          dueDate:  v.dueDate,
-          priority: v.status === "overdue" ? "high" : v.status === "due_soon" ? "medium" : "low",
-        }))
-    : vaccineReminders;
+  const reminders: VaccineReminder[] = (data?.vaccines ?? [])
+    .filter((v: { status: string }) => v.status !== "completed")
+    .map((v: { _id: string; vaccine: string; dueDate: string; status: string }) => ({
+      id:       v._id ?? v.vaccine,
+      vaccine:  v.vaccine,
+      dueDate:  v.dueDate,
+      priority: v.status === "overdue" ? "high" : v.status === "due_soon" ? "medium" : "low",
+    }));
 
   if (isLoading) return <CardSkeleton rows={3} />;
   return <SmartRemindersWidget reminders={reminders} />;
@@ -145,25 +138,49 @@ function RemindersSection() {
 function FamilySection() {
   const { data, isLoading } = useSWR("/api/family", fetcher, { fallbackData: null, revalidateOnFocus: false, shouldRetryOnError: false });
 
-  const members: FamilyMember[] = data?.members
-    ? data.members.map((m: FamilyMember & { id: string }, i: number) => ({
-        ...m,
-        label:       m.name ?? `Member ${i + 1}`,
-        avatarColor: undefined,
-      }))
-    : familyMembers;
+  const members: FamilyMember[] = (data?.members ?? []).map(
+    (m: FamilyMember & { id: string }, i: number) => ({
+      ...m,
+      label: m.name ?? `Member ${i + 1}`,
+      avatarColor: undefined,
+    })
+  );
 
   if (isLoading) return <CardSkeleton rows={2} height="h-20" />;
   return <FamilyStatusPanel members={members} />;
 }
 
-// ── Overview cards (static from homeStats for now) ────────────────────────────
-const OVERVIEW_CARDS = [
-  { label: "Vaccines Received", value: String(homeStats.vaccinesReceived), sub: `of ${homeStats.vaccinesScheduled} scheduled`, icon: Syringe,    color: "#4f46e5", bg: "var(--accent-subtle)"          },
-  { label: "Next Appointment",  value: homeStats.nextAppointmentDate,      sub: homeStats.nextAppointmentTime,                  icon: Calendar,   color: "#10b981", bg: "rgba(16,185,129,0.08)"         },
-  { label: "Family Members",    value: String(homeStats.familyMembersCount), sub: "All tracked",                                icon: Users,      color: "#f59e0b", bg: "rgba(245,158,11,0.08)"         },
-  { label: "Overall Progress",  value: `${homeStats.overallProgress}%`,    sub: homeStats.overallProgress >= 80 ? "Well protected" : "In progress", icon: TrendingUp, color: "#8b5cf6", bg: "rgba(139,92,246,0.08)" },
-];
+// ── Overview cards — computed from real API data ──────────────────────────────
+function OverviewCardsSection() {
+  const { data: vacData, isLoading: vacLoading } = useSWR("/api/vaccinations", fetcher, { fallbackData: null, revalidateOnFocus: false, shouldRetryOnError: false });
+  const { data: apptData, isLoading: apptLoading } = useSWR("/api/appointments/next", fetcher, { revalidateOnFocus: true, shouldRetryOnError: false });
+  const { data: famData, isLoading: famLoading } = useSWR("/api/family", fetcher, { fallbackData: null, revalidateOnFocus: false, shouldRetryOnError: false });
+
+  const isLoading = vacLoading || apptLoading || famLoading;
+
+  const vaccines: { status: string }[] = vacData?.vaccines ?? [];
+  const received  = vaccines.filter((v) => v.status === "completed").length;
+  const scheduled = vaccines.length;
+  const progress  = scheduled > 0 ? Math.round((received / scheduled) * 100) : 0;
+
+  const appt = apptData?.appointment ?? null;
+  const familyCount = famData?.members?.length ?? 0;
+
+  const cards = [
+    { label: "Vaccines Received", value: isLoading ? "—" : String(received),       sub: isLoading ? "" : `of ${scheduled} scheduled`,                          icon: Syringe,    color: "#4f46e5", bg: "var(--accent-subtle)"          },
+    { label: "Next Appointment",  value: isLoading ? "—" : (appt?.date ?? "None"), sub: isLoading ? "" : (appt?.time ?? "No upcoming appointment"),             icon: Calendar,   color: "#10b981", bg: "rgba(16,185,129,0.08)"         },
+    { label: "Family Members",    value: isLoading ? "—" : String(familyCount),    sub: isLoading ? "" : "All tracked",                                         icon: Users,      color: "#f59e0b", bg: "rgba(245,158,11,0.08)"         },
+    { label: "Overall Progress",  value: isLoading ? "—" : `${progress}%`,         sub: isLoading ? "" : (progress >= 80 ? "Well protected" : "In progress"),    icon: TrendingUp, color: "#8b5cf6", bg: "rgba(139,92,246,0.08)" },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {cards.map((card, i) => (
+        <OverviewCard key={card.label} {...card} delay={i * 0.06} />
+      ))}
+    </div>
+  );
+}
 
 // ── AI insight (session-scoped) ───────────────────────────────────────────────
 function AIInsightSection() {
@@ -177,6 +194,12 @@ function AIInsightSection() {
 
 // ── Dashboard shell ───────────────────────────────────────────────────────────
 export default function CitizenDashboard() {
+  const { data: profileData } = useSWR("/api/profile", fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+  });
+
+  const userName: string = profileData?.profile?.fullName ?? "";
   return (
     <div className="max-w-5xl mx-auto space-y-5 pb-24 md:pb-8">
 
@@ -186,7 +209,7 @@ export default function CitizenDashboard() {
       {/* Row 1 — Header + Greeting + AI strip */}
       <Row delay={0}>
         <div className="space-y-3">
-          <GreetingBar name="Rahim" />
+          <GreetingBar name={userName} />
           <SectionErrorBoundary>
             <AIInsightSection />
           </SectionErrorBoundary>
@@ -195,11 +218,9 @@ export default function CitizenDashboard() {
 
       {/* Row 2 — Overview stats */}
       <Row delay={0.07}>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {OVERVIEW_CARDS.map((card, i) => (
-            <OverviewCard key={card.label} {...card} delay={i * 0.06} />
-          ))}
-        </div>
+        <SectionErrorBoundary>
+          <OverviewCardsSection />
+        </SectionErrorBoundary>
       </Row>
 
       {/* Row 3 — Quick actions (full width) */}

@@ -38,7 +38,7 @@ export default function GreetingBar({ name }: GreetingBarProps) {
           {emoji}
         </motion.span>
         <h1 className="font-bold text-2xl" style={{ color: "var(--text-primary)" }}>
-          {text}, {name}!
+          {name ? <>{text}, {name}!</> : <span className="inline-block h-7 w-48 rounded-lg animate-pulse" style={{ background: "var(--border)" }} />}
         </h1>
       </div>
       <p className="text-sm mt-0.5 ml-9" style={{ color: "var(--text-muted)" }}>

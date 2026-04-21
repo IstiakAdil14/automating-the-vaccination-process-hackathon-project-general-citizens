@@ -42,6 +42,11 @@ export async function POST(req: NextRequest) {
     if (identityType === "nid") {
       const nidExists = await User.findOne({ nid });
       if (nidExists) return NextResponse.json({ error: "nid_exists" }, { status: 409 });
+
+      // Whitelist check — NID must be pre-approved by admin
+      const whitelisted = await NidRecord.findOne({ nid });
+      if (!whitelisted) return NextResponse.json({ error: "nid_not_approved" }, { status: 403 });
+      if (whitelisted.userId) return NextResponse.json({ error: "nid_exists" }, { status: 409 });
     } else {
       const bcExists = await User.findOne({ birthCertNumber });
       if (bcExists) return NextResponse.json({ error: "birth_cert_exists" }, { status: 409 });
@@ -60,7 +65,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (identityType === "nid") {
-      await NidRecord.create({ nid, userId: user._id });
+      await NidRecord.findOneAndUpdate({ nid }, { userId: user._id });
     } else {
       await BirthCertRecord.create({ birthCertNumber, dateOfBirth: birthCertDob, userId: user._id });
     }
