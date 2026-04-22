@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { Calendar, MapPin, Clock, Plus, CheckCircle, AlertCircle, X, ChevronRight, Search, Loader2 } from "lucide-react";
 import { authedFetcher as fetcher, getAuthHeader } from "@/lib/fetcher";
@@ -58,6 +59,7 @@ function ListSkeleton() {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function AppointmentsPage() {
+  const router = useRouter();
   const [tab, setTab]           = useState("All");
   const [search, setSearch]     = useState("");
   const [showBook, setShowBook] = useState(false);
@@ -93,7 +95,7 @@ export default function AppointmentsPage() {
           <h1 className="font-bold text-2xl" style={{ color: "var(--text-primary)" }}>Appointments</h1>
           <p className="text-sm mt-0.5" style={{ color: "var(--text-muted)" }}>Manage your vaccination schedule</p>
         </div>
-        <button onClick={() => setShowBook(true)} className="btn-primary" style={{ padding: "10px 18px" }}>
+        <button onClick={() => router.push("/programs")} className="btn-primary" style={{ padding: "10px 18px" }}>
           <Plus size={15} /> Book New
         </button>
       </div>
