@@ -158,7 +158,7 @@ export default function LoginPage() {
               </div>
               <span className="font-bold text-lg">Vax<span style={{ color: "var(--accent)" }}>Care</span></span>
             </Link>
-            <div className="lg:ml-auto">
+            <div className="lg:ml-auto mt-8">
               <button
                 onClick={() => setLang((l) => l === "en" ? "bn" : "en")}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all hover:scale-105"
@@ -180,7 +180,7 @@ export default function LoginPage() {
           </div>
 
           {/* Login method toggle */}
-          <div className="flex rounded-2xl p-1 mb-5 gap-1" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
+          <div className="flex rounded-2xl p-1 gap-1 mt-4" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
             {[
               { label: lang === "en" ? "Email Address" : "ইমেইল", icon: <Mail size={15} />, val: false },
               { label: lang === "en" ? "NID Number" : "NID", icon: <IdCard size={15} />, val: true },
@@ -284,7 +284,7 @@ export default function LoginPage() {
               type="submit"
               disabled={loading || !!isLocked}
               className="btn-primary w-full justify-center glow-pulse"
-              style={{ padding: "14px", fontSize: "1rem", borderRadius: "14px", opacity: loading || isLocked ? 0.7 : 1, marginTop: "8px" }}
+              style={{ padding: "10px", fontSize: "0.875rem", borderRadius: "12px", opacity: loading || isLocked ? 0.7 : 1, marginTop: "6px" }}
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -305,17 +305,31 @@ export default function LoginPage() {
           </div>
 
           {/* Register CTA */}
-          <div className="rounded-2xl p-5 text-center" style={{ background: "var(--accent-subtle)", border: "1px solid var(--border-strong)" }}>
-            <p className="text-sm mb-3" style={{ color: "var(--text-secondary)" }}>
+          <div className="rounded-xl p-3 text-center" style={{ background: "var(--accent-subtle)", border: "1px solid var(--border-strong)" }}>
+            <p className="text-xs mb-2" style={{ color: "var(--text-secondary)" }}>
               {T.noAccount}
             </p>
             <Link
               href="/register"
               className="btn-ghost w-full justify-center"
+              style={{ borderRadius: "10px", padding: "7px", fontSize: "0.82rem" }}
+            >
+              {T.createFree} <ArrowRight size={13} />
+            </Link>
+          </div>
+
+          {/* Vaccination Center Login */}
+          <div className="rounded-2xl p-5 text-center mt-1" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
+            <p className="text-sm mb-3" style={{ color: "var(--text-muted)" }}>
+              Are you a vaccination center staff?
+            </p>
+            <a
+              href="http://localhost:3002/login"
+              className="btn-ghost w-full justify-center"
               style={{ borderRadius: "12px", padding: "10px", fontSize: "0.9rem" }}
             >
-              {T.createFree} <ArrowRight size={15} />
-            </Link>
+              <Syringe size={15} /> Vaccination Center Login
+            </a>
           </div>
 
         </div>
